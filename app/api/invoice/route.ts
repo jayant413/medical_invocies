@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const { date, invoice, taxable, gross } = body;
 
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 403 });
+      return NextResponse.json("Unauthorized", { status: 403 });
     }
 
     const newInvoice = await prismadb.invoice.create({
@@ -25,18 +25,17 @@ export async function POST(req: Request) {
 
     return NextResponse.json(newInvoice, { status: 200 });
   } catch (error) {
-    console.log("[STORES_POST]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    console.log("[INVOICE_POST]", error);
+    return NextResponse.json("Internal error", { status: 500 });
   }
 }
-
 
 export async function GET(req: Request) {
   try {
     const { userId } = auth();
 
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 403 });
+      return NextResponse.json("Unauthorized", { status: 403 });
     }
 
     const userInvoices = await prismadb.invoice.findMany({
@@ -46,7 +45,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(userInvoices, { status: 200 });
   } catch (error) {
-    console.log("[INVOICES_GET]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    console.log("[INVOICE_GET]", error);
+    return NextResponse.json("Internal error", { status: 500 });
   }
 }
